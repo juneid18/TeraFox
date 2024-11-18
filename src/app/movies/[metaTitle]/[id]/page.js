@@ -109,7 +109,7 @@ export default function MovieViewPage({ children }) {
 
       {/* Meta title */}
 
-      {/* <Head>
+      <head>
         <title>{`${tmdbData.title} (${new Date(
           tmdbData.release_date
         ).getFullYear()}) - Movie Details`}</title>
@@ -118,7 +118,7 @@ export default function MovieViewPage({ children }) {
           name="keywords"
           content={tmdbData.genres?.map((genre) => genre.name).join(", ")}
         />
-      </Head> */}
+      </head>
 
       {/* Backdrop Header */}
       <div className="relative h-[60vh]">
