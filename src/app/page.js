@@ -1,101 +1,91 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import Header from "./components/Home/Header";
+import Sidebar from "./components/Home/Sidebar";
+import MovieGrid from "./components/Home/MovieGrid";
+import Footer from "./components/Home/Footer";
+import Pagination from "./components/Home/Pagination";
+import Trending from "./components/Home/Trending";
+import axios from "axios";
+import NoticeBar from "./components/Home/NoticeBar";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [filters, setFilters] = useState({});
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); // Default page size
+  const [movieData, setMovieData] = useState([]);
+  const [totalMovies, setTotalMovies] = useState(0); // Store the total number of movies
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Fetch movies for pagination from the server
+  const fetchMovies = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get("/api/getpaginationmovies", {
+        params: {
+          page: currentPage,
+          limit: pageSize, // Pass the page size as well
+        },
+      });
+      if (response.data.success) {
+        setMovieData(response.data.data || []);
+        setTotalMovies(response.data.totalMovies || 0); // Set total number of movies
+      } else {
+        throw new Error(response.data.message || "Failed to fetch movies");
+      }
+    } catch (err) {
+      console.error("Error fetching movies:", err.message);
+      setError("Failed to load movies. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Refetch movies when the page or filters change
+  useEffect(() => {
+    fetchMovies();
+  }, [currentPage, pageSize]); // Dependency on currentPage and pageSize
+
+  const totalPages = Math.ceil(totalMovies / pageSize); // Calculate total pages dynamically
+
+  return (
+    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
+      <Header />
+      <NoticeBar />
+      <Trending movies={movieData} />
+      <main className="container mx-auto flex flex-col md:flex-row py-8">
+        {/* Sidebar for filters */}
+        <Sidebar filters={filters} setFilters={setFilters} />
+
+        {/* Main Content */}
+        <div className="flex-1 md:ml-4 mt-4 md:mt-0">
+          {isLoading ? (
+            <p className="text-center text-gray-500">Loading movies...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : movieData.length > 0 ? (
+            <>
+              <MovieGrid
+                movies={movieData}
+                onSelectMovie={(movie) => setSelectedMovie(movie)}
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages} // Pass the calculated total pages
+                onPageChange={setCurrentPage}
+              />
+            </>
+          ) : (
+            <p className="text-center text-gray-400">No movies found.</p>
+          )}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <Footer />
     </div>
   );
 }
