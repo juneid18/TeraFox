@@ -5,12 +5,12 @@ import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { Loader2, Star, Clock, Globe2, Download, Telegram } from "lucide-react";
-import Footer from "@/app/components/Home/Footer";
-import Contactus from "@/app/components/Home/Contactus";
+import Footer from "../../../components/Home/Footer";
+import Contactus from "../../../components/Home/Contactus";
 import { IoArrowBack } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ReletedMovies from "@/app/components/Home/ReletedMovies";
+import ReletedMovies from "../../../components/Home/ReletedMovies";
 import { FaTelegramPlane } from "react-icons/fa";
 
 export default function MovieViewPage({ children }) {
@@ -106,19 +106,6 @@ export default function MovieViewPage({ children }) {
         <IoArrowBack className="text-white text-xl" />
         <span>Back</span>
       </h2>
-
-      {/* Meta title */}
-
-      {/* <Head>
-        <title>{`${tmdbData.title} (${new Date(
-          tmdbData.release_date
-        ).getFullYear()}) - Movie Details`}</title>
-        <meta name="description" content={tmdbData.overview} />
-        <meta
-          name="keywords"
-          content={tmdbData.genres?.map((genre) => genre.name).join(", ")}
-        />
-      </Head> */}
 
       {/* Backdrop Header */}
       <div className="relative h-[60vh]">

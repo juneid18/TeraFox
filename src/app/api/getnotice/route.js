@@ -1,7 +1,7 @@
 // pages/api/getmovie.js
 import { NextResponse } from "next/server";
 import { connect } from "../../dbconfig/db";
-import Notice from "@/app/models/NoticeModel";
+import Notice from "../../models/NoticeModel";
 
 connect();
 
