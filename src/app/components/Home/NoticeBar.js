@@ -5,14 +5,14 @@ import axios from 'axios';
 
 const NoticeBar = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [Notices, setNotices] = useState([]);
+  const [Notices, setNotices] = useState(null);
 
   // Always call the useEffect hook at the top level
   useEffect(() => {
     const fetchNotice = async () => {
       try {
         const result = await axios.post('/api/getnotice');
-        if (result.data.success) {
+        if (result.data.success && result.data.data.length > 0) {
           setNotices(result.data.data[0]);  // Store only the 'data' array
         } else {
           throw new Error(result.data.message || 'Failed to fetch Notices');
@@ -26,7 +26,7 @@ const NoticeBar = () => {
   }, []);
 
   // Do not return anything if the notice bar should not be visible
-  if (!isVisible || Notices.length === 0) return null;
+    if (!isVisible || !Notices) return null;
 
   return (
     <div className="absolute w-full flex justify-end items-center p-20">

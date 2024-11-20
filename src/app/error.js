@@ -1,19 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import Link from 'next/link';
 
 const ErrorPage = ({ error }) => {
-  const router = useRouter();
-
-  // Redirect after 3 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('https://terafox-movielist.blogspot.com/'); // Redirect to the website list page
-    }, 3000); // 3 seconds delay
-
-    return () => clearTimeout(timer); // Cleanup the timer
-  }, [router]);
 
   return (
     <div style={styles.container}>
@@ -21,7 +11,7 @@ const ErrorPage = ({ error }) => {
       <p style={styles.message}>
         We&apos;re sorry for the inconvenience. You are being redirected to our website list...
       </p>
-      <p style={styles.subMessage}>Please wait while we redirect you.</p>
+      <Link href={'https://terafox-movielist.blogspot.com/'} type="button" className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900">Click Here to redirect ...</Link>
     </div>
   );
 };

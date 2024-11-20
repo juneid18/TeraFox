@@ -9,6 +9,7 @@ import Pagination from "./components/Home/Pagination";
 import Trending from "./components/Home/Trending";
 import axios from "axios";
 import NoticeBar from "./components/Home/NoticeBar";
+import { revalidatePath } from "next/cache";
 
 export default function Home() {
   const [filters, setFilters] = useState({});
