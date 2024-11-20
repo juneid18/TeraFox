@@ -85,7 +85,7 @@ const RequestMovie = () => {
         <p className="text-white">
           Alternatively, you can{' '}
           <a
-            href="https://t.me/your_telegram_bot"
+            href="https://t.me/+DeJ0j4FqXNk3MjU1"
             className="text-blue-400 underline"
             target="_blank"
             rel="noopener noreferrer"
