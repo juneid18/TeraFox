@@ -97,11 +97,6 @@ export async function generateMetadata({ params }: { params: { id: string; metaT
   }
 }
 
-
-export default function MovieLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
+export default function MovieLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
