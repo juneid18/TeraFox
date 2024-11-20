@@ -4,16 +4,8 @@ import axios from 'axios';
 
 // Function to fetch movie data
 async function getMovie(id) {
-  const baseURL =
-  typeof window !== 'undefined'
-    ? window.location.origin // Client-side
-    : 'https://tera-fox.vercel.app/'; // Server-side
-
-if (!baseURL) {
-  throw new Error('Base URL is not defined.');
-}
   try {    
-    const response = await axios.post(`${baseURL}/api/FetchbyID`, { id });
+    const response = await axios.post(`https://tera-fox.vercel.app/api/FetchbyID`, { id });
     if (!response.data.success) throw new Error('Failed to fetch movie from database');
     
     const tmdbResponse = await axios.get(
