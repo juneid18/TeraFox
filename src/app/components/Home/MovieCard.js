@@ -49,11 +49,18 @@ const route = useRouter();
       </div>
     );
   }
-
+  function slugify(title) {
+    return title
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+      .trim() // Remove extra spaces
+      .replace(/\s+/g, '-'); // Replace spaces with hyphens
+  }
+  const cleanTitle = slugify(movie.metaTitle);
   return (
     <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-md transform hover:scale-105 transition duration-200">
  
-      <Link href={`/movies/${movie.metaTitle}/${movie._id}`} prefetch={true}>
+      <Link href={`/movies/${cleanTitle}/${movie._id}`} prefetch={true}>
         <Image
           src={`https://image.tmdb.org/t/p/w500${tmdbData.poster_path}`}
           alt={tmdbData.title}
