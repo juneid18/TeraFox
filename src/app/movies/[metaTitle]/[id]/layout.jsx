@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import axios from 'axios';
 
+
 // Function to fetch movie data
 async function getMovie(id) {
   const baseURL =
