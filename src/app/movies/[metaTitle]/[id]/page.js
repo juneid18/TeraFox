@@ -13,7 +13,7 @@ import Link from "next/link";
 import ReletedMovies from "../../../components/Home/ReletedMovies";
 import { FaTelegramPlane } from "react-icons/fa";
 
-export default function MovieViewPage({ children }) {
+export default function MovieViewPage() {
   const router = useRouter();
 
   const { id } = useParams();
