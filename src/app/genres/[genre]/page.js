@@ -2,9 +2,9 @@
 
 import { useState, useEffect, use } from "react";
 import axios from "axios";
-import Header from "@/app/components/Home/Header";
-import MovieCard from "@/app/components/Home/MovieCard";
-import Sidebar from "@/app/components/Home/Sidebar";
+import Header from "../../components/Home/Header";
+import MovieCard from "../../components/Home/MovieCard";
+import Sidebar from "../../components/Home/Sidebar";
 
 export default function GenrePage({ params }) {
   const { genre } = use(params);

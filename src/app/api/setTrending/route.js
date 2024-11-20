@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connect } from "../../dbconfig/db";  // Ensure your path is correct
-import Movie from "@/app/models/MovieModel";  // Ensure this is your Movie model
+import Movie from "../../models/MovieModel";  // Ensure this is your Movie model
 
 connect();
 

@@ -1,7 +1,7 @@
 // pages/api/getmovie.js
 import { NextResponse } from "next/server";
 import { connect } from "../../dbconfig/db";
-import Movie from "@/app/models/MovieModel";
+import Movie from "../../models/MovieModel";
 
 connect();
 

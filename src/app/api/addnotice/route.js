@@ -1,5 +1,5 @@
-import { connect } from "@/app/dbconfig/db";
-import Notice from "@/app/models/NoticeModel";
+import { connect } from "../../dbconfig/db";
+import Notice from "../../models/NoticeModel";
 import { NextResponse, NextRequest } from "next/server";
 
 connect();
