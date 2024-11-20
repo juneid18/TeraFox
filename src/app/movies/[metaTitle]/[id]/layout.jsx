@@ -1,43 +1,24 @@
 import { Metadata } from 'next';
 import axios from 'axios';
 
-// Define the Movie type
-interface Movie {
-  title: string;
-  release_date: string;
-  overview: string;
-  genres?: { name: string }[];
-  poster_path?: string;
-  metatitle?: string;
-}
-
-// Define API response types
-interface ApiResponse {
-  success: boolean;
-  movie: {
-    movieID: string;
-    metaTitle: string;
-  };
-}
-
-interface TmdbResponse {
-  title: string;
-  overview: string;
-  release_date: string;
-  genres: { name: string }[];
-  poster_path: string;
-}
-
 // Function to fetch movie data
-async function getMovie(id: string): Promise<Movie> {
-  try {
-    const response = await axios.post<ApiResponse>(`/api/FetchbyID`, { id });
-    if (!response.data.success) throw new Error('Failed to fetch movie from database');
+async function getMovie(id) {
+  const baseURL =
+  typeof window !== 'undefined'
+    ? window.location.origin // Client-side
+    : 'http://localhost:3000/'; // Server-side
 
-    const tmdbResponse = await axios.get<TmdbResponse>(
+if (!baseURL) {
+  throw new Error('Base URL is not defined.');
+}
+  try {    
+    const response = await axios.post(`${baseURL}/api/FetchbyID`, { id });
+    if (!response.data.success) throw new Error('Failed to fetch movie from database');
+    
+    const tmdbResponse = await axios.get(
       `https://api.themoviedb.org/3/movie/${response.data.movie.movieID}?api_key=${process.env.TMDB_API_KEY}`
     );
-
+    
     return {
       title: response.data.movie.metaTitle || tmdbResponse.data.title,
       release_date: tmdbResponse.data.release_date,
@@ -58,14 +39,16 @@ async function getMovie(id: string): Promise<Movie> {
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string; metaTitle: string } }): Promise<Metadata> {
-  try {
-    const movie = await getMovie(params.id);
+export async function generateMetadata({ params }) {
+  const { id, metaTitle } = await params; // Await params destructuring
 
+  try {
+    const movie = await getMovie(id);
+    
     return {
       title: movie.metatitle || movie.title,
       description: movie.overview,
-      keywords: movie.genres?.map((genre) => genre.name).join(', '),
+      keywords: movie.genres?.map(genre => genre.name).join(', '),
       openGraph: {
         title: movie.metatitle || movie.title,
         description: movie.overview,
@@ -95,6 +78,6 @@ export async function generateMetadata({ params }: { params: { id: string; metaT
   }
 }
 
-export default function MovieLayout({ children }: { children: React.ReactNode }) {
+export default function MovieLayout({ children }) {
   return <>{children}</>;
 }
