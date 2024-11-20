@@ -31,9 +31,7 @@ interface TmdbResponse {
 // Function to fetch movie data
 async function getMovie(id: string): Promise<Movie> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
-    const response = await axios.post<ApiResponse>(`${baseUrl}/api/FetchbyID`, { id });
+    const response = await axios.post<ApiResponse>(`/api/FetchbyID`, { id });
     if (!response.data.success) throw new Error('Failed to fetch movie from database');
 
     const tmdbResponse = await axios.get<TmdbResponse>(
