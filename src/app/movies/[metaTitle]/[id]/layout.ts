@@ -17,7 +17,6 @@ interface ApiResponse {
   movie: {
     movieID: string;
     metaTitle: string;
-    // Add other fields from your API response
   };
 }
 
@@ -29,73 +28,58 @@ interface TmdbResponse {
   poster_path: string;
 }
 
-// Define the getMovie function
+// Function to fetch movie data
 async function getMovie(id: string): Promise<Movie> {
   try {
-    // Use absolute URL for API calls
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    
-    // Get data from your API
-    const response = await axios.post<ApiResponse>(`${baseUrl}/api/FetchbyID`, { id });
-    
-    if (!response.data.success) {
-      throw new Error("Failed to fetch movie from database");
-    }
 
-    // Fetch TMDb data
+    const response = await axios.post<ApiResponse>(`${baseUrl}/api/FetchbyID`, { id });
+    if (!response.data.success) throw new Error('Failed to fetch movie from database');
+
     const tmdbResponse = await axios.get<TmdbResponse>(
       `https://api.themoviedb.org/3/movie/${response.data.movie.movieID}?api_key=${process.env.TMDB_API_KEY}`
     );
 
-    // Combine both responses
     return {
       title: response.data.movie.metaTitle || tmdbResponse.data.title,
       release_date: tmdbResponse.data.release_date,
       overview: tmdbResponse.data.overview,
       genres: tmdbResponse.data.genres,
       poster_path: tmdbResponse.data.poster_path,
-      metatitle: response.data.movie.metaTitle
+      metatitle: response.data.movie.metaTitle,
     };
   } catch (error) {
     console.error('Error fetching movie:', error);
-    // Return a default movie object to prevent errors
     return {
       title: 'Movie Not Found',
       release_date: new Date().toISOString(),
       overview: 'Movie details not available',
       genres: [],
-      metatitle: 'Movie Not Found'
+      metatitle: 'Movie Not Found',
     };
   }
 }
 
-export async function generateMetadata(
-  { params }: { params: { id: string; metaTitle: string } }
-): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string; metaTitle: string } }): Promise<Metadata> {
   try {
     const movie = await getMovie(params.id);
-    
+
     return {
       title: movie.metatitle || movie.title,
       description: movie.overview,
-      keywords: movie.genres?.map((genre) => genre.name).join(", "),
+      keywords: movie.genres?.map((genre) => genre.name).join(', '),
       openGraph: {
         title: movie.metatitle || movie.title,
         description: movie.overview,
-        images: movie.poster_path 
-          ? [`https://image.tmdb.org/t/p/original${movie.poster_path}`]
-          : [],
+        images: movie.poster_path ? [`https://image.tmdb.org/t/p/original${movie.poster_path}`] : [],
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
         title: movie.metatitle || movie.title,
         description: movie.overview,
-        images: movie.poster_path 
-          ? [`https://image.tmdb.org/t/p/original${movie.poster_path}`]
-          : [],
+        images: movie.poster_path ? [`https://image.tmdb.org/t/p/original${movie.poster_path}`] : [],
       },
-      // Additional metadata
       alternates: {
         canonical: `/movies/${params.metaTitle}/${params.id}`,
       },
@@ -112,6 +96,7 @@ export async function generateMetadata(
     };
   }
 }
+
 
 export default function MovieLayout({
   children,
