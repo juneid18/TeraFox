@@ -6,7 +6,7 @@ async function getMovie(id) {
   const baseURL =
   typeof window !== 'undefined'
     ? window.location.origin // Client-side
-    : 'http://localhost:3000/'; // Server-side
+    : 'https://tera-fox.vercel.app/'; // Server-side
 
 if (!baseURL) {
   throw new Error('Base URL is not defined.');
