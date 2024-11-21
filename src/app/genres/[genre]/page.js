@@ -79,7 +79,6 @@ export default function GenrePage({ params }) {
       </div>
     );
   };
-console.log(movies);
 
   return (
     <div className="min-h-screen bg-gray-900">
