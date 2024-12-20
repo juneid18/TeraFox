@@ -12,7 +12,7 @@
     "@next/third-parties": "^15.0.3",
     "axios": "^1.7.7",
     "lucide-react": "^0.460.0",
-    "mongoose": "^8.8.1",
+    "mongoose": "^8.8.3",
     "next": "^15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
